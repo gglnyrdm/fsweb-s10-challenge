@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import { nanoid } from "nanoid";
 import { useHistory } from "react-router";
 import Gratitude from "./../assets/grForm.png";
+import { notEkleAPI } from "../actions";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function PostForm() {
   const {
@@ -10,6 +13,8 @@ export default function PostForm() {
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: "onChange" });
+
+  const dispatch = useDispatch();
 
   const history = useHistory();
 
@@ -21,11 +26,13 @@ export default function PostForm() {
         .filter((v) => v !== "")
         .join("|"),
     };
-
-    // burada ilgili eylemi dispatch edin
-    // toast mesajı gösterin
-    // sonra aşağıdaki satırı aktifleştirin
-    // setTimeout(() => history.push("/notlar"), 2000);
+    dispatch(notEkleAPI(yeniNot));
+ 
+    toast.info("Notunuz gönderildi :)", {
+      autoClose: 500,
+    });
+    
+    history.push("/notlar");
   }
 
   const inputCx = "border border-zinc-300 h-9 rounded-none text-sm px-2 w-full";
